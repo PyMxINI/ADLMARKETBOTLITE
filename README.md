@@ -2,7 +2,7 @@
 Бот с открытым исходным кодом,для автоматической передачи вещей [Steam-Trader](https://steam-trader.com/)
 
 ## GUIDE 
-Пожалуйста, ознакомьтесь с [Wiki](https://github.com/PyMxINI/ADLMARKETBOTLITE/wiki/Welcome-to-the-ADLMARKETBOT-wiki!) для руководства по установке / использованию.
+Пожалуйста, ознакомьтесь с [Wiki](https://github.com/PyMxINI/ADLMARKETBOTLITE/wiki/Installation) для руководства по установке / использованию.
 
 
 ### FUNCTIONS
