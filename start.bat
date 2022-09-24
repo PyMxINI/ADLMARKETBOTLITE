@@ -1,4 +1,6 @@
 @echo off
 title ADLMARKETBOTLITE
+:loop
 python main.py
-pause
+timeout /t 5
+goto loop
