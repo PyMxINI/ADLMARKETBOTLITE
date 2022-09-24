@@ -53,6 +53,6 @@ def start_bot():
 
     while True:
         schedule.run_pending()
-
+        time.sleep(1)
 
 start_bot()
