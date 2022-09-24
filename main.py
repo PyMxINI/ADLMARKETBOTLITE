@@ -16,10 +16,17 @@ def log_in_steam():
         exit(1)
 
 def check_trade():
+    print(colorama.Fore.BLUE + "[Info] Request has been sent to check trades on steam-trader")
     try:
         res_trader = requests.get(f"https://api.steam-trader.com/exchange/?key={authdata.trader_api}")
+    except Exception as e:
+        print(colorama.Fore.RED + f"steam-trader request failed: {str(e)}")
+
+    try:
         res_trade_json = res_trader.json()
-        print(colorama.Fore.BLUE + "[Info] Request has been sent to check tradeofferid on website")
+    except Exception as e:
+        print(colorama.Fore.RED + f"steam-trader response parsing failed: {str(e)}")
+    else:
         try_amount = 10
 
         success_steamtrader = res_trade_json.get("success", "")
@@ -46,9 +53,6 @@ def check_trade():
             print(colorama.Fore.GREEN + f"steam-trader exchange error: {errstr__steamtrader} ({errcode_steamtrader})")
         else:
             print('wut?')
-            
-    except Exception as e:
-        print(colorama.Fore.RED + f"steam-trader request failed: {str(e)}")
 
 def session_ok():
     if steam_client.is_session_alive():
