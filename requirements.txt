@@ -1,0 +1,4 @@
+requests
+schedule
+colorama
+steampy
