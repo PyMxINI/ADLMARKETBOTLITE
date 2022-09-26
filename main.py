@@ -9,6 +9,7 @@ colorama.init()
 steam_client = SteamClient(authdata.api_key)
 
 def log_in_steam():
+    print('login in Steam...')
     try:
         steam_client.login(authdata.login, authdata.password, "guard.json")
     except Exception as e:
@@ -73,4 +74,5 @@ def start_bot():
         schedule.run_pending()
         time.sleep(1)
 
+log_in_steam()
 start_bot()
