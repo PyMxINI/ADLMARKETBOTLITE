@@ -1,6 +1,8 @@
 import requests
 import schedule
 import time
+import os.path
+import pickle
 import colorama
 from steampy.client import SteamClient
 import authdata
@@ -9,24 +11,53 @@ colorama.init()
 steam_client = SteamClient(authdata.api_key)
 
 def log_in_steam():
+    # Shitty hack for cookie caching right here
+    # imagine the smell, mmmmm 
+    if os.path.exists('./main.dat'):
+        print('cookie file exists')
+        if os.path.isfile('./main.dat'):
+            print('cookie file surely exist and is file')
+            print('loading cookies...')
+            try:
+                with open('./main.dat', "rb") as f:
+                    steam_client._session.cookies._cookies = pickle.load(f)
+            except Exception as e:
+                print('restoring cookies from file failed: '+repr(e))
+    else:
+        print('cookie file not found')
+
+    steam_client.was_login_executed = True
+    steam_client.username = authdata.login
+    steam_client._password = authdata.password
+    if steam_client.is_session_alive():
+        print('session is alive, no need to relogin')
+        return
+    else:
+        print('no, session is kill, need to (re)login')
+        steam_client.was_login_executed = False
+
     print('login in Steam...')
     try:
         steam_client.login(authdata.login, authdata.password, "guard.json")
     except Exception as e:
-        print(colorama.Fore.RED + f"fatal steam login error: {str(e)}")
+        print(colorama.Fore.RED + f"fatal steam login error: {repr(e)}")
         exit(1)
+    else:
+        print('logged into Steam, saving cookies...')
+        with open('./main.dat', "wb") as f:
+            pickle.dump(steam_client._session.cookies._cookies, f)
 
 def check_trade():
     print(colorama.Fore.BLUE + "[Info] Request has been sent to check trades on steam-trader")
     try:
         res_trader = requests.get(f"https://api.steam-trader.com/exchange/?key={authdata.trader_api}")
     except Exception as e:
-        print(colorama.Fore.RED + f"steam-trader request failed: {str(e)}")
+        print(colorama.Fore.RED + f"steam-trader request failed: {repr(e)}")
 
     try:
         res_trade_json = res_trader.json()
     except Exception as e:
-        print(colorama.Fore.RED + f"steam-trader response parsing failed: {str(e)}")
+        print(colorama.Fore.RED + f"steam-trader response parsing failed: {repr(e)}")
     else:
         try_amount = 10
 
