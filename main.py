@@ -6,13 +6,14 @@ import pickle
 import colorama
 from steampy.client import SteamClient
 import authdata
+from steampy import guard
 
 colorama.init()
 steam_client = SteamClient(authdata.api_key)
 
 def log_in_steam():
     # Shitty hack for cookie caching right here
-    # imagine the smell, mmmmm 
+    # imagine the smell, mmmmm
     if os.path.exists('./main.dat'):
         print('cookie file exists')
         if os.path.isfile('./main.dat'):
@@ -29,6 +30,7 @@ def log_in_steam():
     steam_client.was_login_executed = True
     steam_client.username = authdata.login
     steam_client._password = authdata.password
+    steam_client.steam_guard = guard.load_steam_guard("guard.json")
     if steam_client.is_session_alive():
         print('session is alive, no need to relogin')
         return
